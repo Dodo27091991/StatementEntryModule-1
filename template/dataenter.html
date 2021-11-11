@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<ul class="nav justify-content-center", style="margin-top:50px; background-color:Grey">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#"><h4 style="color:white;">Update Record </h4></a>
+  </li>
+</ul>
+
+<div class="container">
+
+<form id="myForm" >
+<div class="col-sm-4">
+{% csrf_token %}
+  <div style="margin-top:20px;" class="row">
+    <label name="id1" value={{db.id}}>Employee ID : {{db.id}} </label>
+    <input type="text" class="form-control" name="statement" value={{db.statement}}></input>
+  </div>
+  <div style="margin-top:20px;" class="row">
+    <input type="text" class="form-control" name="grouping" value={{db.grouping}}></input>
+  </div>
+  <div style="margin-top:20px;" class="row">
+    <input type="text" class="form-control" name="grouping_label" value={{db.grouping_label}}></input>
+  </div>
+  <div style="margin-top:20px;" class="row">
+    <input type="text" class="form-control" name="account_name" value={{db.account_name}}></input>
+  </div>
+<div style="margin-top:20px;" class="row">
+    <input type="text" class="form-control" name="account_name_label" value={{db.account_name_label}}></input>
+  </div>
+<div style="margin-top:20px;" class="row">
+    <input type="text" class="form-control" name="context" value={{db.context}}></input>
+  </div>
+<div style="margin-top:20px;" class="row">
+    <input type="text" class="form-control" name="value" value={{db.value}}></input>
+  </div>
+<div style="margin-top:20px;" class="row">
+    <input type="text" class="form-control" name="unit" value={{db.unit}}></input>
+  </div>
+
+
+  <div style="margin-top:20px;" class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-dark">Update</button>
+    <p class="message"></p>
+    </div></div>
+
+ </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+
+const form= document.getElementById('myForm');
+form.addEventListener("submit",dataEntryMethod);
+
+function getCookie(c_name) {
+        if(document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if(c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if(c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+
+function dataEntryMethod(e){
+  e.preventDefault();
+  var dataString = $(this).serialize();
+  var myvar= {{db.id}}
+  var myurl = "http://localhost:8000/update/"+myvar+""
+  console.log(myurl)
+
+  var name = $('nname').val();
+  console.log(name)
+  var dataString = $(this).serialize();
+  $.ajax({
+    type:'PUT',
+    url:myurl,
+    headers:{
+                    "X-CSRFToken": getCookie("csrftoken")
+               },
+    dataType:'json',
+    data:dataString,
+    success:function(data){
+        $('.message').append("<br><li>"+JSON.stringify(data)+"</li>")
+    },
+  })
+}
+  </script>
+ 
+</html>
